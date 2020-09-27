@@ -1,0 +1,151 @@
+/*
+  Nome e nº USP
+
+  Cirillo Ribeiro Ferreira - 6431200
+  Matheus de Lima Barbosa - 5968663
+  Tonny Costa Cordeiro - 6539839
+*/
+
+/*
+Arquivo que reúne funções da representação textual do oceano
+*/
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <allegro5\allegro.h>
+
+#include "representacao_textual.h"
+
+/* Inicializa a matrix oceano */
+representacao inicializarRepresentacao()
+{
+    int i;
+    
+    representacao oceano = (representacao) malloc( sizeof(struct representacao_t) ); 
+
+    /* Aloca memória para as colunas da matrix oceano */
+    oceano->representacao = (char**) malloc( NUMERO_LINHA_REPRESENTACAO * sizeof(char*) );
+
+    if( oceano->representacao == NULL )
+    {
+        printf("Memória insuficiente!");
+        exit(1);
+    }
+
+    for(i = 0; i < NUMERO_LINHA_REPRESENTACAO; i++)
+    {
+        /* Aloca memória para a linha 'i' da matrix oceano */
+        oceano->representacao[i] = (char*) malloc( NUMERO_COLUNA_REPRESENTACAO * sizeof(char) );
+
+        if( oceano->representacao[i] == NULL )
+        {
+            printf("Memória insuficiente!");
+            exit(1);
+        }
+    }
+
+    limparRepresentacao(oceano);
+
+    return oceano;
+}
+
+/* Destroi a matrix e libera sua memória */
+void destruirRepresentacao(representacao oceano)
+{
+    int i;
+
+    if( oceano == NULL )
+        return;
+
+    /* Libera memória de cada linha da matrix */
+    for(i = 0; i < NUMERO_LINHA_REPRESENTACAO; i++)
+        free( oceano->representacao[i] );
+
+    /* Libera memória das colunas da matrix*/
+    free( oceano->representacao );
+    free( oceano );
+}
+
+/* Define '.' para todas as posições da matriz */
+void limparRepresentacao(representacao oceano)
+{
+    int i, j;
+
+    for(i = 0; i < NUMERO_LINHA_REPRESENTACAO; i++)
+    {
+        /* Define o caracter '.' para cada posição */
+        for(j = 0; j < NUMERO_COLUNA_REPRESENTACAO; j++)
+            oceano->representacao[i][j] = '.';
+    }
+}
+
+/* Define a posição dos passageiros na matriz */
+void definirVisualRepresentacao(representacao oceano, passageiros *ps, recifes *rs, bote *b1, bote *b2, navio *n)
+{
+    passageiro *p;
+    char id;
+
+    limparRepresentacao(oceano);
+
+    /* Percorre a lista de passageiros e imprime sua identificação
+       na posição corresponente na representação.
+       Nesta representação, são tomadas os valores inteiros das
+       posições x e y. */
+    for(p = ps->head->prox; p != NULL; p = p->prox)
+    {
+        if( !p->colidido )
+        {
+             /* Mantém o id entre os inteiro 33 (!) e 126 (~). */
+            id = (p->id % (126 - 33)) + 33;
+
+            /* Evita confusão na representação dos passageiros */
+            if( id == COLISAO || id == '.' ) id = 126;
+        }
+        else
+            id = COLISAO;
+
+        oceano->representacao[(int)p->posicao->y][(int)p->posicao->x] = id;
+    }
+}
+
+/* Função que imprime a representação textual do oceano */
+void imprimirRepresentacao(representacao oceano)
+{
+    int i, j;
+
+    /* Imprime de fato a matrix oceano */
+    for(i = 0; i < NUMERO_LINHA_REPRESENTACAO; i++)
+    {
+        for( j = 0; j < NUMERO_COLUNA_REPRESENTACAO; j++)
+            printf("%c", oceano->representacao[i][j] );
+
+        printf("\n");
+    }
+}
+
+/* Função que verifica se um determinado objeto está fora
+   da área representada */
+int objetoForaArea(posicao *pos)
+{
+    int x = (int)pos->x;
+    int y = (int)pos->y;
+
+    if( x < 0 || x >= NUMERO_COLUNA_REPRESENTACAO )
+        return 1;
+
+    if( y < 0 || y >= NUMERO_LINHA_REPRESENTACAO )
+        return 1;
+
+    return 0;
+}
+
+int obterLarguraRepresentacao()
+{
+	return NUMERO_COLUNA_REPRESENTACAO;
+}
+
+int obterAlturaRepresentacao()
+{
+	return NUMERO_LINHA_REPRESENTACAO;
+}

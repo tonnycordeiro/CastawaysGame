@@ -1,0 +1,24 @@
+/*
+  Nome e nº USP
+
+  Cirillo Ribeiro Ferreira - 6431200
+  Matheus de Lima Barbosa - 5968663
+  Tonny Costa Cordeiro - 6539839
+*/
+
+#ifndef _REPRESENTACAO_TEXTUAL_H_
+#define _REPRESENTACAO_TEXTUAL_H_
+
+#include "representacao.h"
+
+#define NUMERO_COLUNA_REPRESENTACAO 120
+#define NUMERO_LINHA_REPRESENTACAO 30
+
+#define COLISAO '!'
+
+struct representacao_t
+{
+	char** representacao;
+};
+
+#endif

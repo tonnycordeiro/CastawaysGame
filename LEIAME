@@ -1,0 +1,36 @@
+Nome e nº USP
+
+Cirillo Ribeiro Ferreira - 6431200
+Matheus de Lima Barbosa - 5968663
+Tonny Costa Cordeiro - 6539839
+
+Jogo náufragos
+------------------------------------------------------------
+
+ATENCAO:
+
+Algumas vezes a janela do jogo fica preta, nao conseguimos depurar o problema, porem veremos a quanto antes.
+  
+Estrutura:
+
+O projeto inicialmente conside em três executáveis:
+
+1) naufragos: é o jogo propriamente dito.
+
+2) tests: realiza os testes de robustez e correção.
+
+3) reports: imprime um relatórios de variacões das velocidades de cada passageiro
+criado durante o jogo.
+
+Compilação:
+
+A compilação pode ser feita de forma geral
+
+ make
+ 
+ou também pode ser feita indivisualmente
+
+ make naufragos
+ make tests
+ make reports
+ 
